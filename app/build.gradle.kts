@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10" // Добавляем плагин для сериализации
 }
 
 android {
@@ -33,13 +34,12 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    buildFeatures{
+    buildFeatures {
         viewBinding = true
     }
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -48,4 +48,10 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation("com.squareup.retrofit2:retrofit:2.9.0") // Retrofit
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Kotlin Serialization
+    implementation(libs.kotlinx.serialization.json)
 }

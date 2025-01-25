@@ -9,42 +9,28 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.lesson4.data.CartoonAdapter
 import com.example.lesson4.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val viewModel: MainViewModel by viewModels()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        viewModel.getCharacters()
+        setupRecyclerView()
 
-        setupButtons()
-        observeViewModel()
-    }
-
-
-
-    private fun setupButtons() {
-        binding.apply {
-            btnIncrement.setOnClickListener { viewModel.onIncrement() }
-            btnDecrement.setOnClickListener { viewModel.onDecrement() }
-
+        viewModel.charactersLiveData.observe(this){
+            data -> //adapter.putList(data)
         }
     }
-    private fun observeViewModel() {
-        viewModel.counterData.observe(this, Observer { model ->
-            binding.tvCount.text = model.count.toString()
-
-            binding.tvCount.setTextColor(
-                if (model.isGreenText) Color.GREEN else Color.BLACK
-
-            )
-            if (model.showCongratulation){
-                Toast.makeText(this, "Поздравляем!", Toast.LENGTH_SHORT).show()
-                viewModel.congratulationsShown()
-            }
-        })
-
+    private fun setupRecyclerView() = with(binding.rvCharacter){
+         layoutManager= LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
+        adapter = CartoonAdapter
     }
+
 }
