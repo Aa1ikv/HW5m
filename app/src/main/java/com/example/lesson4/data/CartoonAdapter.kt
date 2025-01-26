@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.lesson4.R
-import com.example.lesson4.data.model.Character
+import com.example.lesson4.model.Character
 import com.example.lesson4.databinding.ItemCharacterBinding
 
 class CartoonAdapter : ListAdapter<Character, CartoonAdapter.CharacterViewHolder>(CharacterDiffCallback()) {

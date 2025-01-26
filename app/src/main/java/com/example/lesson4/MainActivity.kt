@@ -1,38 +1,38 @@
-package com.example.lesson4
+package com.example.rickandmorti
 
+import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.lesson4.databinding.ActivityMainBinding
-import com.example.lesson4.ui.adapter.CartoonAdapter
+import com.example.rickandmorti.databinding.ActivityMain2Binding
+import com.example.rickandmorti.ui.CharacterAdapter
+import com.example.rickandmorti.ui.CharacterDetailsActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
-    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private lateinit var binding: ActivityMain2Binding
     private val viewModel: MainViewModel by viewModels()
-    private val adapter = CartoonAdapter()
+    private val adapter = CharacterAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityMain2Binding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupRecyclerView()
+        binding.rvCharacters.layoutManager = LinearLayoutManager(this)
+        binding.rvCharacters.adapter = adapter
 
-        viewModel.charactersLiveData.observe(this) { characters ->
-            adapter.submitList(characters)
+        viewModel.getCharacters().observe(this) { data ->
+            adapter.submitData(lifecycle, data)
         }
 
-        viewModel.errorLiveData.observe(this) { error ->
-            Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+        adapter.setOnItemClickListener { character ->
+            val intent = Intent(this, CharacterDetailsActivity::class.java).apply {
+                putExtra("characterId", character.id)
+            }
+            startActivity(intent)
         }
-
-        viewModel.getCharacters()
-    }
-
-    private fun setupRecyclerView() = with(binding.rvCharacter) {
-        layoutManager = LinearLayoutManager(this@MainActivity)
-        adapter = this@MainActivity.adapter
     }
 }
